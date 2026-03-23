@@ -1,0 +1,87 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+    username: ${APP_USER}
+    password: ${APP_PASSWORD}
+    hikari:
+      pool-name: PorlioHikariCP
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 30000        # 30s - thời gian tối đa connection được idle
+      max-lifetime: 1800000      # 30 phút - thời gian tối đa connection tồn tại
+      connection-timeout: 20000  # 20s - timeout khi lấy connection từ pool
+      validation-timeout: 5000   # 5s - timeout khi kiểm tra connection
+      leak-detection-threshold: 20000 # phát hiện rò rỉ connection (20s)
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    enabled: true
+    user: ${MIGRATION_USER}
+    password: ${MIGRATION_PASSWORD}
+  data:
+    redis:
+      port: 6379
+      host: localhost
+      password: ${REDIS_PASSWORD}
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  access-key: 82273f80cb6d26a5c6663b0079d8f506cf3e0ba9c2963f8859e3b36eb33f6589
+  refresh-key: 4925eb40bcb96e8c8738fdc1e5f80017ebb2e49a59832f09f58bc04f66d21b05
+  expiration:
+    access: 2   # 2 giờ
+    refresh: 7 # 7 ngày
+    verification: 24 # 24 giờ
+
+rate-limiter:
+  capacity: 20
+  refill-rate: 2
+
+openapi:
+  service:
+    api-docs: porlio-api-docs
+    title: Back-End API DOCS
+    version: v1.0
+    server: http://localhost:${server.port}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+app:
+  mail:
+    from: ${EMAIL_USERNAME}
+  admin:
+    email: ${EMAIL_USERNAME}
+    password: 18082003
+    username: admin

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Verify Your Email Address</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@300;400;500&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0f0f0f;
+      font-family: 'DM Sans', sans-serif;
+      color: #e8e4dc;
+      -webkit-font-smoothing: antialiased;
+      padding: 48px 16px;
+    }
+
+    .wrapper {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Header bar ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #c8a96e 0%, #e8d5a3 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #c8a96e;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* ── Hero band ── */
+    .hero {
+      background: linear-gradient(135deg, #1c1810 0%, #2a200e 50%, #1c1810 100%);
+      padding: 52px 48px 44px;
+      position: relative;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,169,110,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c8a96e;
+      background: rgba(200,169,110,0.1);
+      border: 1px solid rgba(200,169,110,0.2);
+      border-radius: 99px;
+      padding: 5px 12px;
+      margin-bottom: 20px;
+    }
+
+    .hero-eyebrow svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: #f0ebe0;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: #c8a96e;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      font-weight: 300;
+      color: #8a8270;
+      line-height: 1.6;
+    }
+
+    /* ── Body ── */
+    .body {
+      padding: 40px 48px;
+    }
+
+    .greeting {
+      font-size: 15px;
+      color: #b0a898;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .greeting strong {
+      color: #e8e4dc;
+      font-weight: 500;
+    }
+
+    /* ── CTA button ── */
+    .cta-wrap {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #c8a96e 0%, #e8d5a3 100%);
+      color: #0f0f0f;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 16px 40px;
+      border-radius: 12px;
+      transition: opacity 0.2s;
+    }
+
+    .cta-btn:hover {
+      opacity: 0.88;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #252525;
+      margin: 32px 0;
+    }
+
+    /* ── Fallback link block ── */
+    .fallback {
+      background: #141414;
+      border: 1px solid #242424;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+
+    .fallback-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #5a5248;
+      margin-bottom: 10px;
+    }
+
+    .fallback-url {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      color: #c8a96e;
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    /* ── Expiry notice ── */
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(200,169,110,0.06);
+      border: 1px solid rgba(200,169,110,0.15);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+
+    .notice svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: #c8a96e;
+      width: 16px;
+      height: 16px;
+    }
+
+    .notice p {
+      font-size: 13px;
+      color: #8a8270;
+      line-height: 1.6;
+    }
+
+    .notice p strong {
+      color: #c8a96e;
+      font-weight: 500;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: #141414;
+      border-top: 1px solid #222;
+      padding: 28px 48px;
+      text-align: center;
+    }
+
+    .footer p {
+      font-size: 12px;
+      color: #3d3b38;
+      line-height: 1.7;
+    }
+
+    .footer a {
+      color: #5a5248;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #c8a96e;
+    }
+
+    .footer .security-note {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #2e2c29;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .hero { padding: 36px 28px 30px; }
+      .hero-title { font-size: 26px; }
+      .body { padding: 32px 28px; }
+      .footer { padding: 24px 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Brand header -->
+  <div class="header">
+    <div class="logo-mark">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z"
+              fill="#0f0f0f" stroke="#0f0f0f" stroke-width="0.5"/>
+      </svg>
+    </div>
+    <span class="brand-name">Porlio</span>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-eyebrow">
+        <svg viewBox="0 0 12 12" fill="currentColor"><circle cx="6" cy="6" r="3"/></svg>
+        Account Verification
+      </div>
+      <h1 class="hero-title">Confirm your<br/><em>email address</em></h1>
+      <p class="hero-subtitle">One quick step and you're all set.</p>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+
+      <p class="greeting">
+        Hi <strong th:text="${username}">Username</strong>,<br/><br/>
+        Thank you for signing up! To complete your registration and activate your account,
+        please verify your email address by clicking the button below.
+      </p>
+
+      <!-- CTA -->
+      <div class="cta-wrap">
+        <a th:href="${verifyUrl}" href="#" class="cta-btn">
+          ✦ &nbsp; Verify My Email Address
+        </a>
+      </div>
+
+      <hr class="divider"/>
+
+      <!-- Fallback URL -->
+      <div class="fallback">
+        <p class="fallback-label">Button not working? Copy this link</p>
+        <span class="fallback-url" th:text="${verifyUrl}">https://example.com/verify?token=...</span>
+      </div>
+
+      <!-- Expiry notice -->
+      <div class="notice">
+        <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M8 1.5a6.5 6.5 0 1 0 0 13A6.5 6.5 0 0 0 8 1.5ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-3a.75.75 0 0 1 .75.75v2.69l1.53 1.53a.75.75 0 1 1-1.06 1.06L7.47 9.28A.75.75 0 0 1 7.25 8.75v-3A.75.75 0 0 1 8 5Z"/>
+        </svg>
+        <p>This verification link will expire in <strong>24 hours</strong>.
+          If you did not create an account, you can safely ignore this email — no action is required.</p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>
+        This email was sent automatically. Please do not reply directly.<br/>
+        If you need help, contact us at <a href="mailto:support@porlio.com">support@yourbrand.com</a>
+      </p>
+      <p class="security-note">
+        © 2025 YourBrand · <a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a><br/>
+        We will never ask for your password via email.
+      </p>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

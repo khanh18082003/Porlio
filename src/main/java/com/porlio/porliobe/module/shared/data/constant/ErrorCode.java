@@ -1,0 +1,46 @@
+package com.porlio.porliobe.module.shared.data.constant;
+
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+public enum ErrorCode {
+  MESSAGE_SUCCESS("0000", HttpStatus.OK),
+  MESSAGE_CREATED("0001", HttpStatus.CREATED),
+  MESSAGE_NO_CONTENT("0002", HttpStatus.NO_CONTENT),
+
+  MESSAGE_INVALID_REQUEST("1000", HttpStatus.BAD_REQUEST),
+  MESSAGE_UNAUTHENTICATED("1001", HttpStatus.UNAUTHORIZED),
+  MESSAGE_UNAUTHORIZED("1002", HttpStatus.FORBIDDEN),
+  MESSAGE_RESOURCE_NOT_FOUND("1003", HttpStatus.NOT_FOUND),
+  MESSAGE_CONFLICT_ERROR("1004", HttpStatus.CONFLICT),
+  MESSAGE_INTERNAL_SERVER_ERROR("1005", HttpStatus.INTERNAL_SERVER_ERROR),
+  MESSAGE_TOKEN_GENERATION_FAILED("1006", HttpStatus.INTERNAL_SERVER_ERROR),
+  MESSAGE_INVALID_TOKEN_TYPE("1007", HttpStatus.INTERNAL_SERVER_ERROR),
+
+  MESSAGE_VALIDATION_ERROR("1999", HttpStatus.BAD_REQUEST),
+  MESSAGE_NOT_BLANK("2000", HttpStatus.BAD_REQUEST),
+  MESSAGE_INVALID_SIZE("2001", HttpStatus.BAD_REQUEST),
+  MESSAGE_INVALID_EMAIL("2002", HttpStatus.BAD_REQUEST),
+  MESSAGE_PASSWORD_MISMATCH("2003", HttpStatus.BAD_REQUEST),
+  MESSAGE_INVALID_ENUM_VALUE("2004", HttpStatus.BAD_REQUEST),
+  MESSAGE_INVALID_PASSWORD("2005", HttpStatus.BAD_REQUEST),
+  MESSAGE_INVALID_USERNAME("2006", HttpStatus.BAD_REQUEST),
+  MESSAGE_EMAIL_NOT_VERIFIED("2007", HttpStatus.BAD_REQUEST),
+
+
+  MESSAGE_DUPLICATE_ENTRY("3000", HttpStatus.CONFLICT),
+  MESSAGE_NOT_MATCHING_PASSWORD("3001", HttpStatus.BAD_REQUEST),
+
+  MESSAGE_INVALID_KEY("9000", HttpStatus.BAD_REQUEST),
+  MESSAGE_UNKNOWN_ERROR("9999", HttpStatus.INTERNAL_SERVER_ERROR),
+  ;
+
+  private final String code;
+  private final HttpStatus httpStatus;
+
+  ErrorCode(final String code, final HttpStatus httpStatus) {
+    this.code = code;
+    this.httpStatus = httpStatus;
+  }
+}

@@ -1,0 +1,15 @@
+server:
+  port: 8000
+logging:
+  level:
+    org.springframework.security: debug
+    org.springframework.data.redis: DEBUG
+app:
+  prefix: /api/v1
+  base-url: ${BASE_URL:http://localhost:${server.port}}
+
+spring:
+  application:
+    name: Porlio
+  profiles:
+    active: @spring.profiles.active@
