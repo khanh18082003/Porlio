@@ -29,11 +29,10 @@ public class SecurityConfig {
   CustomJwtDecoder jwtDecoder;
   CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-  String[] PUBLIC_ENDPOINTS = {
-      "/api/v1/auth",
-      "/api/v1/auth/verification-code",
-      "/api/v1/auth/resend-verification-code",
-      "/api/v1/auth/refresh",
+  static final String[] PUBLIC_ENDPOINTS = {
+      "/api/v1/auth/**",
+      "/api/v1/verification/**",
+      "/api/v1/sessions/**",
       "/api/v1/users/registration",
   };
 

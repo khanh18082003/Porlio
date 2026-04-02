@@ -20,7 +20,7 @@ public class ApiResponse<T> implements Serializable {
   String code;
   int status;
   String message;
-  T data;
+  transient T data;
   Instant timestamp;
 
   // ── Factory methods ──────────────────────────

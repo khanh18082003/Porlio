@@ -8,6 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j(topic = "SECURITY_UTIL")
 public class SecurityUtil {
+  private SecurityUtil() {
+    /* This utility class should not be instantiated */
+  }
+
 
   public static String getCurrentUserId() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();

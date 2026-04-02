@@ -1,15 +1,15 @@
 package com.porlio.porliobe.module.admin.service.impl;
 
-import com.porlio.porliobe.module.admin.entity.Permission;
-import com.porlio.porliobe.module.admin.entity.Role;
-import com.porlio.porliobe.module.admin.repository.PermissionRepository;
-import com.porlio.porliobe.module.admin.repository.RoleRepository;
+import com.porlio.porliobe.module.iam.access.permission.entity.Permission;
+import com.porlio.porliobe.module.iam.access.permission.repository.PermissionRepository;
+import com.porlio.porliobe.module.iam.access.role.entity.Role;
+import com.porlio.porliobe.module.iam.access.role.repository.RoleRepository;
+import com.porlio.porliobe.module.iam.user.entity.User;
+import com.porlio.porliobe.module.iam.user.repository.UserRepository;
 import com.porlio.porliobe.module.shared.data.constant.ErrorCode;
-import com.porlio.porliobe.module.shared.data.constant.PermissionKey;
-import com.porlio.porliobe.module.shared.data.constant.RoleName;
+import com.porlio.porliobe.module.iam.access.permission.constant.PermissionKey;
+import com.porlio.porliobe.module.iam.access.role.constant.RoleName;
 import com.porlio.porliobe.module.shared.exception.AppException;
-import com.porlio.porliobe.module.user.entity.User;
-import com.porlio.porliobe.module.user.repository.UserRepository;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,10 +61,8 @@ public class ApplicationInitService {
   // ─────────────────────────────────────────────────────
 
   private void initPermissions() {
-    // Lấy tất cả permission keys đang có trong DB
     Set<String> existingKeys = permissionRepository.findAllKeys();
-    // → query: SELECT p.key FROM permissions p
-
+    Set<Permission> createdPermissions = new HashSet<>();
     int created = 0;
 
     for (PermissionKey pk : PermissionKey.values()) {
@@ -81,15 +79,16 @@ public class ApplicationInitService {
           .urlPattern(pk.getUrlPattern())
           .module(pk.getModule())
           .build();
-
-      permissionRepository.save(permission);
+      createdPermissions.add(permission);
       created++;
+
       log.info("Created permission: [{}] {}", pk.getModule(), pk.getKey());
     }
 
     if (created == 0) {
       log.info("  ✓ All permissions already exist, skipping.");
     } else {
+      permissionRepository.saveAll(createdPermissions);
       log.info("  → Created {} new permission(s).", created);
     }
   }
@@ -120,7 +119,6 @@ public class ApplicationInitService {
   }
 
   private void assignPermissionsToRole(Role role, RoleName roleName) {
-    // Xác định set permissions cho role này
     Set<String> permissionKeys = resolvePermissionsForRole(roleName);
 
     // Load permissions từ DB theo keys
@@ -153,11 +151,8 @@ public class ApplicationInitService {
       case ADMIN -> Arrays.stream(PermissionKey.values())
           .map(PermissionKey::getKey)
           .collect(Collectors.toSet());
-      // ADMIN có tất cả permissions
 
       case USER -> Set.of();
-      // USER không có admin permissions
-      // (quyền của USER được kiểm soát ở business logic, không qua permission table)
     };
   }
 
@@ -166,13 +161,11 @@ public class ApplicationInitService {
   // ─────────────────────────────────────────────────────
 
   private void initAdmin() {
-    // Kiểm tra đã có admin chưa
     if (userRepository.existsByEmail(adminEmail)) {
       log.info("Admin user already exists, skipping.");
       return;
     }
 
-    // Lấy role ADMIN (phải tồn tại sau bước initRoles)
     Role adminRole = roleRepository.findByRoleKey(RoleName.ADMIN)
         .orElseThrow(() -> new AppException(ErrorCode.MESSAGE_RESOURCE_NOT_FOUND));
 

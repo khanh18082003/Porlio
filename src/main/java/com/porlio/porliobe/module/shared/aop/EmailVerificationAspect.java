@@ -3,8 +3,8 @@ package com.porlio.porliobe.module.shared.aop;
 import com.porlio.porliobe.module.shared.data.constant.ErrorCode;
 import com.porlio.porliobe.module.shared.exception.AppException;
 import com.porlio.porliobe.module.shared.utils.SecurityUtil;
-import com.porlio.porliobe.module.user.entity.User;
-import com.porlio.porliobe.module.user.service.UserService;
+import com.porlio.porliobe.module.iam.user.entity.User;
+import com.porlio.porliobe.module.iam.user.service.UserService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,7 +23,7 @@ public class EmailVerificationAspect {
     String userId = SecurityUtil.getCurrentUserId();
     User currentUser = userService.getById(UUID.fromString(userId));
 
-    if (!currentUser.getIsVerified()) {
+    if (Boolean.FALSE.equals(currentUser.getIsVerified())) {
       throw new AppException(ErrorCode.MESSAGE_EMAIL_NOT_VERIFIED);
     }
   }

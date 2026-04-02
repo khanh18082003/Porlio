@@ -1,6 +1,6 @@
 package com.porlio.porliobe.module.shared.configuration;
 
-import com.porlio.porliobe.module.user.service.impl.CustomUserDetailService;
+import com.porlio.porliobe.module.iam.user.service.impl.CustomUserDetailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

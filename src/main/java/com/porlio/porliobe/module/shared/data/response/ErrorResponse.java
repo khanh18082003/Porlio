@@ -16,7 +16,7 @@ public class ErrorResponse extends ApiResponse<Void> implements Serializable {
 
   String path;
   String error;
-  List<FieldError> fieldErrors;
+  transient List<FieldError> fieldErrors;
 
   @Builder(builderMethodName = "errorBuilder")
   public ErrorResponse(String code,

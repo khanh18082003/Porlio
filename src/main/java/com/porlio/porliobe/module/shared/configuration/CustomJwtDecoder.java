@@ -1,9 +1,8 @@
 package com.porlio.porliobe.module.shared.configuration;
 
 import com.nimbusds.jose.JOSEException;
-import com.porlio.porliobe.module.auth.service.AuthenticationService;
-import com.porlio.porliobe.module.auth.service.JwtService;
-import com.porlio.porliobe.module.shared.data.constant.TokenType;
+import com.porlio.porliobe.module.iam.session.service.JwtService;
+import com.porlio.porliobe.module.iam.session.constant.TokenType;
 import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
@@ -45,7 +44,7 @@ public class CustomJwtDecoder implements JwtDecoder {
           .macAlgorithm(MacAlgorithm.HS512)
           .build();
     }
-
+    log.info("Token is valid, decoding token");
     return nimbusJwtDecoder.decode(token);
   }
 }
